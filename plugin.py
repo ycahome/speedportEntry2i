@@ -11,9 +11,15 @@
     <description>
     		<h2>SpeedPort Entry 2i ADSL/VDSL Routers v.1.0.0</h2><br/>
     </description>
-     <params>
-         <param field="Address" label="Router IP" width="200px" required="true" default="192.168.1.1"/>
-         <param field="Mode6" label="Debug" width="75px">
+    <params>
+        <param field="Address" label="Router IP" width="200px" required="true" default="192.168.1.1"/>
+        <param field="Mode5" label="Notifications" width="75px">
+            <options>
+                <option label="Enabled" value="Notify"/>
+                <option label="Disable" value="Disable"  default="true" />
+            </options>
+        </param>
+        <param field="Mode6" label="Debug" width="75px">
             <options>
                 <option label="True" value="Debug"/>
                 <option label="False" value="Normal"  default="true" />
@@ -49,17 +55,6 @@ class BasePlugin:
         self.error = False
         self.nextpoll = datetime.now()
         self.pollinterval = 60  #Time in seconds between two polls
-
-        self.plugindata = {
-            # Plugin Text:                      [gitHub author,        repository,                  plugin key]
-            "Idle":                             ["idle",            "idle",                         "idle"],
-            "SNMP Reader":                      ["ycahome",         "SNMPreader",                   "SNMPreader"],
-            "NUT_UPS":                          ["999LV",           "NUT_UPS",                      "NUT_UPS"],
-            "Xiaomi Mi Flower Mate":            ["flatsiedatsie",   "Mi_Flower_mate_plugin",        "Mi_Flower_mate_plugin"],
-            "Sonos Players":                    ["gerard33",        "sonos",                        "Sonos"],
-            "Dummy Plugin":                     ["ycahome",         "Dummy_Plugin",                 "Dummy_Plugin"],
-        }        
-        
         
         return
 
@@ -74,6 +69,17 @@ class BasePlugin:
         else:
             Domoticz.Debugging(0)
 
+
+        
+        if 1 not in Devices:
+            try:
+                Domoticz.Device(Name="Status", Unit=1, TypeName="Custom",Options={"Custom": "1;Phase"},Used=1).Create()
+            except:
+                Domoticz.Error("Device 1 Creation Error.")
+            else:
+                Domoticz.Log("Device created.")
+
+                DumpConfigToLog()
             
         #Domoticz.Heartbeat(int(Parameters["Mode1"]))
 
