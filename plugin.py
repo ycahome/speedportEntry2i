@@ -56,6 +56,20 @@ class BasePlugin:
         self.nextpoll = datetime.now()
         self.pollinterval = 60  #Time in seconds between two polls
         
+        self.plugindata = {
+            # Sensor No:            [Name,                  repository,                     plugin key]
+            "2":                    ["Speed(Down)",         "SNMPreader",                   "SNMPreader"],
+            "3":                    ["Speed(Up)",           "SNMPreader",                   "SNMPreader"],
+            "4":                    ["Noise(Down)",         "NUT_UPS",                      "NUT_UPS"],
+            "5":                    ["Noise(Up)",           "Mi_Flower_mate_plugin",        "Mi_Flower_mate_plugin"],
+            "6":                    ["CRC Errors(Down)",    "sonos",                        "Sonos"],
+            "7":                    ["CRC Errors(Up)",      "Dummy_Plugin",                 "Dummy_Plugin"],
+            "8":                    ["Atten(Down)",         "Dummy_Plugin",                 "Dummy_Plugin"],
+            "9":                    ["Atten(Up)",           "Dummy_Plugin",                 "Dummy_Plugin"],
+            "8":                    ["FEC Errors(Down)",    "Dummy_Plugin",                 "Dummy_Plugin"],
+            "9":                    ["FEC Errors(Up)",      "Dummy_Plugin",                 "Dummy_Plugin"],
+        }        
+        
         return
 
     def onStart(self):
@@ -79,6 +93,17 @@ class BasePlugin:
             else:
                 Domoticz.Log("Device created.")
 
+        for x in range (2,3,4,5,6,7,8,9)
+            if x not in Devices:
+                try:
+                    Domoticz.Device(Name="Status", Unit=x, TypeName="Custom",Options={"Custom": "1;Phase"},Used=1).Create()
+                except:
+                    Domoticz.Error("Device " + x + " Creation Error.")
+                else:
+                    Domoticz.Log("Device " + x + " created.")
+                
+                
+                
                 DumpConfigToLog()
             
         #Domoticz.Heartbeat(int(Parameters["Mode1"]))
